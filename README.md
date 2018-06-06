@@ -1,1 +1,3 @@
-# glowing-octo-rotary-phone
+# WebGL Practice
+
+> Follow me as I learn WebGL
