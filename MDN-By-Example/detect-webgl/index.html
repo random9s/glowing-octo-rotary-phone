@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Detect WebGL</title>
+        <style>
+            body {
+                text-align: center;
+            }
+
+            button {
+                display: block;
+                font-size: inherit;
+                margin: auto;
+                padding: 0.6em;
+            }
+        </style>
+    </head>
+    <body>
+        <p>[ Detect WebGL ]</p>
+        <button>Press to detect WebGLRenderingContext</button>
+        <script>
+            window.addEventListener('load', function () {
+                var detectParagraph = document.querySelector('p'),
+                    detectBtn = document.querySelector('button');
+
+                detectBtn.addEventListener('click', function () {
+                    var canvas = document.createElement('canvas');
+                    var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+
+                    var txt = 'Your browser or device may not support WebGL';
+                    if (gl && gl instanceof WebGLRenderingContext) txt = 'Your browser supports web gl';
+                    detectParagraph.innerHTML = txt;
+                }, false);
+            }, false);
+        </script>
+    </body>
+</html>
