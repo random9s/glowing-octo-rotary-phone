@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebGL - Rotating Color</title>
+            <style>
+                body{
+                   text-align: center; 
+                }
+                canvas {
+                    display: block;
+                    width: 280px;
+                    height: 210px;
+                    margin: auto;
+                    padding: 0;
+                    border: none;
+                    background-color: black;
+                }
+            </style>
+    </head>
+    <body>
+        <canvas>
+            Your browser does not support HTML5
+        </canvas>
+        <script>
+            function getRandomColor() {
+                return [Math.random(), Math.random(), Math.random()];
+            }
+
+            window.addEventListener('load', function setupWebGL (e) {
+                window.removeEventListener(e.type, setupWebGL, false);
+
+                var canvas = document.querySelector('canvas');
+                var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+                if (!gl) throw 'web gl not supported';
+                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+                //Start interval color switching
+                var intervID = setInterval(function () {
+                    var color = getRandomColor();
+                    gl.clearColor(color[0], color[1], color[2], 1.0);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                }, 500);
+
+                //Stop switching on click
+                canvas.addEventListener('click', function () {
+                    clearInterval(intervID);
+                },false);
+
+            }, false);
+        </script>
+    </body>
+</html>
