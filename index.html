@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example WebGL</title>
+    </head>
+    <body>
+        <canvas>
+            <!-- Add fallback here -->
+            Your browser doesn't support HTML 5
+        </canvas>
+        <p><!-- Any text related to web gl component --></p>
+        <script src="app.js"></script>
+        <script>
+            const app = window.app;
+
+            app.on('initgl', function (ev) {
+                var gl = app.context();
+                console.log(gl);
+            }, false);
+        </script>
+    </body>
+</html>

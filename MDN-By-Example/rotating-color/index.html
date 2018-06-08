@@ -21,17 +21,15 @@
         <canvas>
             Your browser does not support HTML5
         </canvas>
+        <script src="../../app.js"></script>
         <script>
             function getRandomColor() {
                 return [Math.random(), Math.random(), Math.random()];
             }
 
-            window.addEventListener('load', function setupWebGL (e) {
-                window.removeEventListener(e.type, setupWebGL, false);
-
-                var canvas = document.querySelector('canvas');
-                var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (!gl) throw 'web gl not supported';
+            const app = window.app;
+            app.on('initgl', function (ev) {
+                var gl = app.context();
                 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
                 //Start interval color switching
@@ -42,7 +40,7 @@
                 }, 500);
 
                 //Stop switching on click
-                canvas.addEventListener('click', function () {
+                app.canvas.addEventListener('click', function () {
                     clearInterval(intervID);
                 },false);
 

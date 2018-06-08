@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shaders</title>
+    </head>
+    <body>
+        <canvas>
+            Your browser does not support HTML 5.
+        </canvas>
+        <p></p>
+
+        <script type="x-shader/x-vertex" id="vertex-shader">
+            #version 100
+            void main() {
+                gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
+                gl_PointSize = 64.0;
+            }
+        </script>
+
+        <script type="x-shader/x-fragment" id="fragment-shader">
+            #version 100
+            void main() {
+                gl_FragColor = vec4(0.18, 0.54, 0.34, 1.0);
+            }
+        </script>
+
+        <script src="../../app.js"></script>
+        <script>
+            const app = window.app;
+
+            const cleanup = () => {
+                var gl = app.context();
+                gl.useProgram(null);
+                if (app.buffer) gl.deleteBuffer(app.buffer);
+                if (app.program) gl.deleteProgram(app.program);
+            };
+
+            const attachShader = (shader, src) => {
+                var gl = app.context();
+                gl.shaderSource(shader, src.innerHTML);
+                gl.compileShader(shader);
+                gl.attachShader(app.program, shader);
+            };
+
+            const detachShader = (shader) => {
+                var gl = app.context();
+                gl.detachShader(app.program, shader);
+                gl.deleteShader(shader);
+            };
+
+
+            app.on('initgl', function (ev) {
+                var gl = app.context();
+                app.program = gl.createProgram();
+
+                //Setup vertex/fragment shaders
+                var vertexShader = gl.createShader(gl.VERTEX_SHADER);
+                attachShader(vertexShader, document.querySelector('#vertex-shader'));
+                var fragmentShader = gl.createShader(gl.FRAGMENT_SHADER); 
+                attachShader(fragmentShader, document.querySelector('#fragment-shader'));
+
+                //link program
+                gl.linkProgram(app.program);
+                detachShader(vertexShader);
+                detachShader(fragmentShader);
+
+                //Check for linking errors
+                if (!gl.getProgramParameter(app.program, gl.LINK_STATUS)) {
+                    var linkErrLog = gl.getProgramInfoLog(app.program);
+                    cleanup();                    
+
+                    document.querySelector('p').innerHTML = 'shader program could not be linked: ' + linkErrLog;
+                    return;
+                }
+
+                //initialize attributes
+                gl.enableVertexAttribArray(0);
+                app.buffer = gl.createBuffer();
+                gl.bindBuffer(gl.ARRAY_BUFFER, app.buffer);
+                gl.vertexAttribPointer(0, 1, gl.FLOAT, false, 0, 0);
+                
+                gl.useProgram(app.program);
+                gl.drawArrays(gl.POINTS, 0, 1);
+
+                cleanup();
+            }, false);
+        </script>
+    </body>
+</html>

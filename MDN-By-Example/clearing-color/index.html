@@ -22,16 +22,11 @@
         <canvas>
             Your browser does not support HTML 5.
         </canvas>
+        <script src="../../app.js"></script>
         <script>
-            window.addEventListener('load', function setupWebGL (e) {
-                "use strict"
-
-                window.removeEventListener(e.type, setupWebGL, false);
-
-                var canvas = document.querySelector('canvas');
-                var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                if (!gl) throw 'webgl is not supported';
-
+            const app = window.app;
+            app.on('initgl', function (ev) {
+                var gl = app.context();
                 gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
                 gl.clearColor(0.0, 0.5, 0.0, 1.0);
                 gl.clear(gl.COLOR_BUFFER_BIT, gl.DEPTH_BUFFER_BIT);
